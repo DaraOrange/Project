@@ -12,10 +12,10 @@ def find_id(sent, root):
 
 def add_children(sent):
     for word in sent:
-        word["CHILDS"] = set()
+        word["CHILDREN"] = set()
     for word in sent:
         if word["DOM"] != "0":
-            sent[int(word["DOM"]) - 1]["CHILDS"].add(word["ID"])
+            sent[int(word["DOM"]) - 1]["CHILDREN"].add(word["ID"])
 
 
 def generate_tree(sent, root, buffer):
@@ -23,7 +23,7 @@ def generate_tree(sent, root, buffer):
     if id == -1:
         return
     buffer.add(sent[id]["ID"])
-    for ch in sent[id]["CHILDS"]:
+    for ch in sent[id]["CHILDREN"]:
         generate_tree(sent, ch, buffer)
 
 
@@ -34,7 +34,7 @@ def id_comp(w):
 def find_min_and_max_in_subtree(sent, root):
     id = find_id(sent, root)
     tot_mn, tot_mx = root, root
-    for ch in sent[id]["CHILDS"]:
+    for ch in sent[id]["CHILDREN"]:
         mn, mx = find_min_and_max_in_subtree(sent, ch)
         if int(mn) < int(tot_mn):
             tot_mn = mn
@@ -43,15 +43,15 @@ def find_min_and_max_in_subtree(sent, root):
     return tot_mn, tot_mx
 
 
-def swap_childs(inp_sent, w, old_to_new):
+def swap_children(inp_sent, w, old_to_new):
     sent = copy.deepcopy(inp_sent)
-    num_of_childs = len(w["CHILDS"])
-    if num_of_childs < 2:
+    num_of_children = len(w["CHILDREN"])
+    if num_of_children < 2:
         return None
 
     ch1 = -1
     ch2 = -1
-    for ch in w["CHILDS"]:
+    for ch in w["CHILDREN"]:
         cur_id = find_id(sent, ch)
         if sent[cur_id]["LINK"] in swap_links:
             if ch1 == -1:

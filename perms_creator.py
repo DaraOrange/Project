@@ -51,7 +51,7 @@ import copy
 
 def generate_tree(sent, root, buffer):
     buffer.add(sent[int(root) - 1]["ID"])
-    for ch in sent[int(root) - 1]["CHILDS"]:
+    for ch in sent[int(root) - 1]["CHILDREN"]:
         generate_tree(sent, ch, buffer)
 
 def generate_candidates(sent, split_links, min_len):
@@ -69,7 +69,7 @@ def generate_candidates(sent, split_links, min_len):
             destroy_strategy = set()
             destroy_sent = copy.deepcopy(sent)
             for word in destroy_sent:
-                word["CHILDS"] = set()
+                word["CHILDREN"] = set()
 
             for a in subset:
                 destroy_strategy.add(a)
@@ -84,7 +84,7 @@ def generate_candidates(sent, split_links, min_len):
                     if word["DOM"] != "_root" and int(word["DOM"]) <= len(sent):
                         if len(destroy_sent) < int(word["DOM"]):
                             print(destroy_sent)
-                        destroy_sent[int(word["DOM"]) - 1]["CHILDS"].add(word["ID"])
+                        destroy_sent[int(word["DOM"]) - 1]["CHILDREN"].add(word["ID"])
             for root in roots:
                 buffer = set()
                 generate_tree(destroy_sent, root, buffer)
